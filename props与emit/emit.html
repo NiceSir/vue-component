@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        Vue.component("Child",{
+            data(){
+                return{
+                    msg:""
+                }
+            },
+            template:`
+                <input @keydown.enter="sendMsg(msg)" v-model='msg'>
+            `,
+            methods: {
+                sendMsg(msg){
+                    // console.log(this)
+                    this.$emit('send-msg',msg)
+                }
+            }
+        })
+
+        let Parent={
+            data(){
+                return{
+                    // msg:""
+                }
+            },
+            template:`
+                <Child @send-msg='getMsg'/>
+            `,
+            methods:{
+                getMsg(msg){
+                    console.log(msg)
+                }
+            }
+        }
+
+
+        new Vue({
+            el:"#app",
+            template:`
+                <Parent/>
+                
+            `,
+            components: {
+                Parent
+            }
+        })
+    </script>
+</body>
+</html>

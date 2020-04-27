@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        let Event = new Vue()
+
+        Vue.component("Child1", {
+            data() {
+                return {
+                    msg: ""
+                }
+            },
+            template: `<p><input v-model='msg' @keydown.enter='sendMsg(msg)'></p>`,
+            methods: {
+                sendMsg(msg) {
+                    Event.$emit("send-msg1", msg)
+                }
+            }
+        })
+        Vue.component("Child2", {
+            data() {
+                return {
+                    msg: ""
+                }
+            },
+            template: `<p><input v-model='msg' @keydown.enter='sendMsg(msg)'></p>`,
+            methods: {
+                sendMsg(msg) {
+                    Event.$emit("send-msg2", msg)
+                }
+            }
+        })
+        Vue.component("Child3", {
+            data() {
+                return {
+                    childMsg1: '',
+                    childMsg2: '',
+                }
+            },
+            template: `<div>
+                    {{childMsg1}},{{childMsg2}}
+                </div>`,
+            mounted () {
+                Event.$on('send-msg1',msg=>{
+                    this.childMsg1=msg
+                })
+                Event.$on('send-msg2',msg=>{
+                    this.childMsg2=msg
+                })
+            }
+        })
+
+        new Vue({
+            el: "#app",
+            template: `
+                <div>                
+                <Child1/>
+                <Child2/>
+                <Child3/>
+                </div>
+
+            `
+        })
+    </script>
+</body>
+
+</html>

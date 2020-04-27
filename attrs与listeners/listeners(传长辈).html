@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('Child',{
+            template:`
+                <div>
+                    {{sendmsg}}    
+                    <button @click='sendMsg(sendmsg)'>子组件发送</button>
+                </div>
+            `,
+            data(){
+                return{
+                    sendmsg:'test'
+                }
+            },
+            methods:{
+                sendMsg(msg){
+                    this.$emit('send-msg',msg)
+                }
+            },
+            
+
+        })
+
+        Vue.component('Parent',{
+            template:`
+                <div>
+                    <Child v-on="$listeners"  @send-msg="getMsg"></Child>
+                </div>
+
+            `,
+            methods:{
+                getMsg(msg){
+                    console.log(msg)
+                }
+            }
+        })
+
+        new Vue({
+            el:'#app',
+            template:`
+                <div>
+                    <Parent  @send-msg="getMsg"/>    
+                </div>
+                
+            `,
+            methods:{
+                getMsg(msg){
+                    console.log('这是传给爷爷的'+msg)
+                }
+            }
+        })
+    </script>
+</body>
+</html>

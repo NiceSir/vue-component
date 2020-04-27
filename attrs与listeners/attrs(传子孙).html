@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('Parent', {
+            data() {
+                return {
+                    msg:'爸爸',
+                    son: '给儿子',
+                    grand: '给孙子',
+                    errorMsg:'错误信息'
+                }
+            },
+            template: `
+                <div>
+                    {{msg}}
+                    <Child :son='son' :grand='grand' :msg='msg' :errorMsg='errorMsg'/>    
+                </div>
+            `,
+        })
+
+        Vue.component('Child', {
+            template:`
+                <div>
+                    {{msg}},{{son}}    
+                </div>
+            `,
+            data(){
+                return{
+                    msg:'',
+                    son:''
+                }
+            },
+            props: {
+                errorMsg:String
+            },
+            created () {
+                console.log(this.$attrs)
+                this.msg=this.$attrs.msg
+                this.son=this.$attrs.son
+            }
+        })
+        Vue.component('Grandson', {
+
+        })
+
+        new Vue({
+            el: '#app',
+            template: `<Parent/>`
+        })
+    </script>
+</body>
+
+</html>
